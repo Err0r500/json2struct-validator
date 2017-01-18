@@ -16,7 +16,7 @@ import (
 //returns nil if compatible
 func Check(a []byte, input interface{}) error {
 	expectedType := reflect.TypeOf(input)
-	// if a pointer to a struct is passed, get the type of the dereferenced object
+
 	if expectedType.Kind() == reflect.Ptr {
 		expectedType = expectedType.Elem()
 	}
