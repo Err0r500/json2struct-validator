@@ -1,6 +1,7 @@
 # json2struct-validator
 
-ValidateJSON : check if a json object is compatible with a given struct
+ValidateJSON : check if a json string is compatible with a given struct
+
 usage :
 ```go
 var JSONstring := "{field1:value}"
