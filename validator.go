@@ -8,12 +8,19 @@ import (
 	"github.com/fatih/structs"
 )
 
-//ValidateJSON : check if a json object is compatible with a given struct
+//ValidateJSON : check if a json []byte is compatible with a given struct
 // usage :
 //var someStruct myPackage.myStruct
-//err := ValidateJSON(JSONstring.Bytes(), reflect.TypeOf(someStruct)
+//err := ValidateJSON(JSONstring.Bytes(), someStruct)
+//or err := ValidateJSON(JSONstring.Bytes(), &someStruct)
 //returns nil if compatible
-func Check(a []byte, expectedType reflect.Type) error {
+func Check(a []byte, input interface{}) error {
+	expectedType := reflect.TypeOf(input)
+	// if a pointer to a struct is passed, get the type of the dereferenced object
+	if expectedType.Kind() == reflect.Ptr {
+		expectedType = expectedType.Elem()
+	}
+	// log.Print(expectedType.Name())
 
 	var jsonMap map[string]interface{}
 	json.Unmarshal(a, &jsonMap)

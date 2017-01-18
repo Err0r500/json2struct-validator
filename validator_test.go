@@ -2,7 +2,7 @@ package validateJSON
 
 import (
 	"encoding/json"
-	"reflect"
+	"log"
 	"testing"
 )
 
@@ -30,31 +30,38 @@ func TestLib(t *testing.T) {
 	friendJSON, _ := json.Marshal(friend)
 
 	t.Run("A=1", func(t *testing.T) { human2Human(t, humanJSON, human) })
-	t.Run("A=2", func(t *testing.T) { person2Person(t, personJSON, person) })
+	t.Run("A=2", func(t *testing.T) { person2Person(t, personJSON, &person) })
 	t.Run("A=3", func(t *testing.T) { human2Person(t, humanJSON, person) })
 	t.Run("A=4", func(t *testing.T) { friend2Person(t, friendJSON, person) })
 }
 
 func human2Human(t *testing.T, a []byte, b Human) {
-	if err := Check(a, reflect.TypeOf(b)); err != nil {
+	if err := Check(a, b); err != nil {
 		t.Error(err)
 	}
 }
-func person2Person(t *testing.T, a []byte, b Person) {
-	if err := Check(a, reflect.TypeOf(b)); err != nil {
+
+//accepts pointers too
+func person2Person(t *testing.T, a []byte, b *Person) {
+	if err := Check(a, b); err != nil {
 		t.Error(err)
 	}
 }
 
 func human2Person(t *testing.T, a []byte, b Person) {
-	if err := Check(a, reflect.TypeOf(b)); err == nil {
+	if err := Check(a, &b); err == nil {
 		//should throw an error to pass the test
 		t.Error(err)
+	} else {
+		log.Print(err)
 	}
 }
+
 func friend2Person(t *testing.T, a []byte, b Person) {
-	if err := Check(a, reflect.TypeOf(b)); err == nil {
+	if err := Check(a, b); err == nil {
 		//should throw an error to pass the test
 		t.Error(err)
+	} else {
+		log.Print(err)
 	}
 }
